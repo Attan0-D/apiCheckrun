@@ -41,12 +41,9 @@ class ListqController extends Controller
                 $listq->category_id = $us['category_id'];
 
                 $listq->save();
-
                  
-
-                //return $listq;
-                return response('Lista criada com sucesso', 201);
-            });
+               
+            });  return response('Lista criada com sucesso', 201);
         }
         catch(\Exception $erro){
             return $erro->getMessage();
@@ -83,8 +80,7 @@ class ListqController extends Controller
             //return $listq;
             return response('Lista atualizada com sucesso', 200);
 
-        }
-        catch(\Exception $erro) {
+        }catch(\Exception $erro) {
             return $erro->getMessage();       
         }
     }

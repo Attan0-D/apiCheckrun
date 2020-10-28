@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest ;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
         try{
 
@@ -47,7 +48,7 @@ class CategoryController extends Controller
 
 
             $category->save();
-            return $category;
+            return response('Categoria cadastrada com sucesso', 201);
 
         }catch(\Exception $erro) {
 
@@ -61,9 +62,11 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function show(int $list_id)
     {
         //
+        $category = Category::where('list_id',$list_id)->get();
+        return $category; 
     }
 
     /**
@@ -84,9 +87,25 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, $id)
     {
         //
+        try{
+
+            $category = Category::find($id);
+
+            $category->name = $request->name;
+            
+            $category->save();
+
+            //return $category;
+            return response('Categoria atualizada com sucesso', 200);
+
+        }
+        catch(\Exception $erro) {
+            return $erro->getMessage();       
+        }
+
     }
 
     /**
@@ -95,8 +114,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+    public function destroy($id)
     {
         //
+        $category = Category::find($id);
+        $category->delete();
     }
 }
