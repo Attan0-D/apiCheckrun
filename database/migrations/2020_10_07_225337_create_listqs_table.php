@@ -16,14 +16,14 @@ class CreateListqsTable extends Migration
         Schema::create('listqs', function (Blueprint $table) {
             $table->id();
             $table->string('name',200);
-            $table->integer('frequency'); 
+
             $table->json('days')->nullable();
             $table->dateTime('hour');
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
             ->onDelete('cascade')->onUpdate('cascade');
-            
+
             $table->unsignedBigInteger('category_id');
             $table->foreign('category_id')->references('id')->on('categories')
             ->onDelete('cascade')->onUpdate('cascade');

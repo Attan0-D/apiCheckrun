@@ -22,8 +22,8 @@ class CreateQuestionsTable extends Migration
             $table->integer('yes');
             $table->integer('no');
 
-            $table->unsignedBigInteger('list_id');
-            $table->foreign('list_id')->references('id')->on('listqs')
+            $table->unsignedBigInteger('listq_id');
+            $table->foreign('listq_id')->references('id')->on('listqs')
             ->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();

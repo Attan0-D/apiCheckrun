@@ -26,43 +26,54 @@ class ListqController extends Controller
 
     public function store(ListRequest $request)
     {
-        
+
         try{
             DB::transaction(function () use ($request) {
                 $us = $request->all();
-                $listq = new Listq;
+                $listq = new Listq();
 
                 $listq->name = $us['name'];
-                $listq->frequency = $us['frequency'];
-                $listq->hour = $us['hour'];
-                
-    
+                // $listq->frequency = $us['frequency'];
+                // $listq->hour = $us['hour'];
+                $listq->days = json_encode($us['days']);
+
+                $listq->hour = Date("Y-m-d")."T".$us['hour'];
+
                 $listq->user_id = $us['user_id'];
                 $listq->category_id = $us['category_id'];
 
                 $listq->save();
-                 
-               
-            });  return response('Lista criada com sucesso', 201);
+                $this->gerarQuestoes($listq, $us['questions']);
+
+                return $listq;
+            });
+
         }
         catch(\Exception $erro){
             return $erro->getMessage();
         }
-
-        
     }
 
-      public function show(int $user_id)
+    private function gerarQuestoes(Listq $listq, array $questions ){
+        $listq->questions()->createMany(
+            $questions
+        );
+
+    }
+
+
+
+    public function show(int $user_id)
      {
          //retorna uma lista de um usuario especifico
         $listq = Listq::where('user_id',$user_id)->get();
-        return $listq; 
+        return $listq;
      }
 
-    // public function edit(User $user)
-    // {
-    //     //
-    // }
+    public function edit(User $user)
+    {
+        //
+    }
 
     public function update(ListRequest $request, $id)
     {
@@ -71,7 +82,7 @@ class ListqController extends Controller
             $listq = Listq::find($id);
 
             $listq->name = $request->name;
-            $listq->frequency = $request->frequency;
+
             $listq->user_id = $request->user_id;
             $listq->category_id = $request->category_id;
 
@@ -81,7 +92,7 @@ class ListqController extends Controller
             return response('Lista atualizada com sucesso', 200);
 
         }catch(\Exception $erro) {
-            return $erro->getMessage();       
+            return $erro->getMessage();
         }
     }
 

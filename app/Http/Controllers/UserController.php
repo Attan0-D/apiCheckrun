@@ -29,12 +29,11 @@ class UserController extends Controller
         try{
             $us = $request->all();
             $user = new User;
+
             $user->name = $us['name'];
             $user->email = $us['email'];
             $user->password = $us['password'];
             $confirmPassword = $us['confirmPassword'];
-
-
 
             //verifica se o email ja existe no banco
             $userExists = User::where('email', $us['email'])->first();
@@ -43,19 +42,19 @@ class UserController extends Controller
                 return response('Email Não Permitido: Outro usuario já esta cadastrado com esse email.', 400);
             }
 
-            //verifica a compatibilidade com os campos senha e confirmar senha            
+            //verifica a compatibilidade com os campos senha e confirmar senha
             if ($user->password != $confirmPassword ){
                 return response ('As senhas não coicidem', 400);
             };
-            
+
             $user->password = Hash::make($user->password);
-    
+
             $user->save();
-            
-            return response('Usuario cadastrado com sucesso', 201);
+
+            return $user;
 
         }
-        catch(\Exception $erro) 
+        catch(\Exception $erro)
         {
             return $erro->getMessage();
         }
@@ -73,32 +72,32 @@ class UserController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         try{
-        
+
             $user = User::find($id);
 
                 $user->name = $request->name;
 
                 //variavel para a segunda condição abaixo
                 $oldemail = $user->email;
-                
-                $user->email = $request->email;                
+
+                $user->email = $request->email;
                 $user->password = $request->password;
 
                 //verifica se o email digitado já esta em uso.
                 $userExists = User::where('email', $user->email)->first();
-        
+
                 // para verificar a existencia do email no banco, e se o mesmo ja
                 // sendo utilizado pelo usuario em questão.
                 if($userExists && $userExists->email != $oldemail){
-                        return response('Email Não Permitido: 
+                        return response('Email Não Permitido:
                         Outro usuario já esta cadastrado com esse email.', 400);
                 }
-                    
+
                 $user->save();
                 return response('Usuario atualizado com sucesso', 200);
 
         }catch(\Exception $erro) {
-            return $erro->getMessage(); 
+            return $erro->getMessage();
         }
     }
 
