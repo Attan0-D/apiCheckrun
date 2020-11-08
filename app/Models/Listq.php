@@ -12,4 +12,8 @@ class Listq extends Model
     public function questions(){
         return $this->hasMany("App\Models\Question");
     }
+
+    // public function appointments(){
+    //     return $this->hasOne("App\Models\Appointment");
+    // }
 }

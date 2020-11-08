@@ -42,10 +42,14 @@ class ListqController extends Controller
                 $listq->user_id = $us['user_id'];
                 $listq->category_id = $us['category_id'];
 
+                
+
                 $listq->save();
                 $this->gerarQuestoes($listq, $us['questions']);
+                // $this->gerarAgendamentos($listq, $us['days'], $us['hour']);
 
-                return $listq;
+
+                return  response('Lista atualizada com sucesso', 201);;
             });
 
         }
@@ -58,11 +62,15 @@ class ListqController extends Controller
         $listq->questions()->createMany(
             $questions
         );
-
     }
 
-
-
+    // private function gerarAgendamentos(Listq $listq, $days, $hour){
+    //     $listq->appointments()->createOne(
+    //         $days,
+    //         $hour
+    //     );
+    // }
+    
     public function show(int $user_id)
      {
          //retorna uma lista de um usuario especifico
@@ -70,10 +78,10 @@ class ListqController extends Controller
         return $listq;
      }
 
-    public function edit(User $user)
-    {
-        //
-    }
+    // public function edit(User $user)
+    // {
+    //     //
+    // }
 
     public function update(ListRequest $request, $id)
     {
@@ -82,6 +90,8 @@ class ListqController extends Controller
             $listq = Listq::find($id);
 
             $listq->name = $request->name;
+            $listq->days = $request->days;
+            $listq->hour = $request->hour;
 
             $listq->user_id = $request->user_id;
             $listq->category_id = $request->category_id;
