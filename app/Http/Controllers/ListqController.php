@@ -9,6 +9,7 @@ use App\Models\Listq;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ListRequest;
+use App\Models\Appointment;
 
 class ListqController extends Controller
 {
@@ -35,7 +36,7 @@ class ListqController extends Controller
                 $listq->name = $us['name'];
                 // $listq->frequency = $us['frequency'];
                 // $listq->hour = $us['hour'];
-                $listq->days = json_encode($us['days']);
+                $listq->days = $us['days'];
 
                 $listq->hour = Date("Y-m-d")."T".$us['hour'];
 
@@ -46,10 +47,10 @@ class ListqController extends Controller
 
                 $listq->save();
                 $this->gerarQuestoes($listq, $us['questions']);
-                // $this->gerarAgendamentos($listq, $us['days'], $us['hour']);
+                $this->gerarAgendamentos($listq);
 
 
-                return  response('Lista atualizada com sucesso', 201);;
+                return  response('Lista atualizada com sucesso', 201);
             });
 
         }
@@ -64,12 +65,28 @@ class ListqController extends Controller
         );
     }
 
-    // private function gerarAgendamentos(Listq $listq, $days, $hour){
-    //     $listq->appointments()->createOne(
-    //         $days,
-    //         $hour
-    //     );
-    // }
+    private function gerarAgendamentos(Listq $listq){
+        // $listq->appointments()->createOne(
+           
+        // );
+
+        $semana = []; 
+        $days = json_decode($listq->days);
+        $days = str_replace('[', '', $days);
+        $days = str_replace(']', '', $days);
+        $days = explode(',', $days);
+
+        for( $i=0; $i<=7; $i++ ){
+            $diaAtual = date('Y-m-d H:i', strtotime("+$i days", strtotime($listq->hour)));
+            $diaAtualNumero = (int) date('w', strtotime("+$i days", strtotime($listq->hour)));
+            if (in_array($diaAtualNumero, $days)){
+                $registro["date"] = $diaAtual; 
+                $semana[] = $registro;
+            }
+        }
+        
+        $listq->appointments()->createMany($semana);
+    }
     
     public function show(int $user_id)
      {

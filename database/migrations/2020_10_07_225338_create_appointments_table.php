@@ -15,10 +15,11 @@ class CreateAppointmentsTable extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->integer('notified');
+            $table->integer('notified')->default(0);
+            $table->dateTime('date');
             
-            $table->unsignedBigInteger('list_id');
-            $table->foreign('list_id')->references('id')->on('listqs')
+            $table->unsignedBigInteger('listq_id');
+            $table->foreign('listq_id')->references('id')->on('listqs')
             ->onDelete('cascade')->onUpdate('cascade');
 
             $table->timestamps();
