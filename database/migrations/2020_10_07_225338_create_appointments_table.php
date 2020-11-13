@@ -17,11 +17,11 @@ class CreateAppointmentsTable extends Migration
             $table->id();
             $table->integer('notified')->default(0);
             $table->dateTime('date');
-            
+
             $table->unsignedBigInteger('listq_id');
             $table->foreign('listq_id')->references('id')->on('listqs')
             ->onDelete('cascade')->onUpdate('cascade');
-
+            $table->unique('date','listq_id');
             $table->timestamps();
         });
     }
