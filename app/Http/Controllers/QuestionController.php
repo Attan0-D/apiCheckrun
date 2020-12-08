@@ -40,18 +40,18 @@ class QuestionController extends Controller
 
                 return response('Questão cadastrada com sucesso', 201);
 
-        
+
 
         }catch(\Exception $erro) {
             return $erro->getMessage();
         }
     }
 
-    public function show(int $list_id)
+    public function show(int $listq_id)
     {
         //retornas as questões de uma lista em especifica
-        $question = question::where('list_id',$list_id)->get();
-         return $question; 
+        $question = question::where('listq_id',$listq_id)->get();
+        return $question;
     }
 
     public function edit(Question $question)
@@ -62,11 +62,11 @@ class QuestionController extends Controller
     public function update(QuestionRequest $request, $id)
     {
         try{
-          
+
                 $question = Question::find($id);
 
                 $question->description = $request->description;
-    
+
                 $question->save();
 
 

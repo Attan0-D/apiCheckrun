@@ -69,36 +69,41 @@ class UserController extends Controller
         //
     }
 
-    public function update(UserUpdateRequest $request, $id)
+    public function update(Request $request, User $user)
     {
-        try{
+        if(!$user) return response('Usuário Inválido', 400);
 
-            $user = User::find($id);
+        $name = $request->input('name');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $confirmPassword =$request->input('confirmPassword');
 
-                $user->name = $request->name;
+        if(!$name) return response('Preencha campo nome',422);
+        if(!$email) return response('Preencha campo email',422);
 
-                //variavel para a segunda condição abaixo
-                $oldemail = $user->email;
-
-                $user->email = $request->email;
-                $user->password = $request->password;
-
-                //verifica se o email digitado já esta em uso.
-                $userExists = User::where('email', $user->email)->first();
-
-                // para verificar a existencia do email no banco, e se o mesmo ja
-                // sendo utilizado pelo usuario em questão.
-                if($userExists && $userExists->email != $oldemail){
-                        return response('Email Não Permitido:
-                        Outro usuario já esta cadastrado com esse email.', 400);
-                }
-
-                $user->save();
-                return response('Usuario atualizado com sucesso', 200);
-
-        }catch(\Exception $erro) {
-            return $erro->getMessage();
+        if($email != $user->email){
+            $checkEmail = User::where('email', $email)->first();
+            if($checkEmail) return response('Email já cadastrado',422);
         }
+
+        if($password){
+            if($password != $confirmPassword )return response('As senhas não coincidem',422);
+        }
+
+        $user->name = $name;
+        $user->email = $email;
+        if($password){
+            $user->password = Hash::make($password);
+        }
+
+
+        $res = $user->save();
+
+        if($res){
+            return response($user, 200);
+        }
+
+        return response('Erro ao atualizar o usuário', 400);
     }
 
     public function destroy($id)
