@@ -95,11 +95,11 @@ class ListqController extends Controller
         return $agendamentos ? true : false;
     }
 
-    public function show(int $user_id)
+    public function show(int $question_id)
      {
          //retorna uma lista de um usuario especifico
-        $listq = Listq::where('user_id',$user_id)->get();
-        return $listq;
+        // $listq = Listq::where('user_id',$user_id)->get();
+        return Listq::with('questions')->find($question_id);
      }
 
     // public function edit(User $user)
@@ -135,6 +135,7 @@ class ListqController extends Controller
         $listq = Listq::find($id);
         $listq->delete();
     }
+    
     public function cromNotificacao(){
         $hoje = date('Y-m-d H:i');
         $agendamentos = Appointment::where('date','<',$hoje)->where('notified','=',0)->take(20)->get();

@@ -64,6 +64,7 @@ class UserController extends Controller
         //retorna o usuario e suas listas de um id específico
         return User::with('listqs')->find($user_id);
     }
+    
     public function edit(User $user)
     {
         //

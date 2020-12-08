@@ -50,8 +50,13 @@ class QuestionController extends Controller
     public function show(int $listq_id)
     {
         //retornas as questões de uma lista em especifica
+<<<<<<< HEAD
         $question = question::where('listq_id',$listq_id)->get();
         return $question;
+=======
+        $question = question::where('listq_id',$list_id)->get();
+         return $question; 
+>>>>>>> dd73eec1b53087c8f957818efc0758f5a6fb9c82
     }
 
     public function edit(Question $question)
