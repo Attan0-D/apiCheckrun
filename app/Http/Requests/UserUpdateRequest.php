@@ -31,9 +31,9 @@ class UserUpdateRequest extends FormRequestSuport
 
         //validações para campos obrigatórios   
         return [
-            'name' => 'required',
-            'email' => 'required|email|',
-            'password' => 'required|min:8',
+
+            'email' => 'email',
+            'password' => 'min:8',
              
         ];
 
@@ -43,10 +43,8 @@ class UserUpdateRequest extends FormRequestSuport
     public function messages()
     {
     return [
-        'name.required' => 'Requer o seu nome',
-        'email.required' => 'Requer o seu email',
         'email.email' => 'Email inválido',
-        'password.required' => 'Requer a sua senha',
+
         'password.min' => 'A senha precisa ter no mínimo oito caractéres',
         ];
     }

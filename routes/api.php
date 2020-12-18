@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('user/login', [UserController::class, 'login']);
 Route::get('notificacao',[ListqController::class, 'cromNotificacao']);
+Route::get('question/unique/{id}', [QuestionController::class, 'showUnique']);
+
 
 
 Route::resource('user', UserController::class );

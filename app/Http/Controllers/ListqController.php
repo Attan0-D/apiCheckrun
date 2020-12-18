@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\ListRequest;
 use App\Models\Appointment;
+use Mockery\Undefined;
 
 class ListqController extends Controller
 {
@@ -107,25 +108,32 @@ class ListqController extends Controller
     //     //
     // }
 
-    public function update(ListRequest $request, $id)
+    public function update(ListRequest $request, Listq $list)
     {
         try{
+            DB::transaction(function () use ($request, $list) {
 
-            $listq = Listq::find($id);
+                $name = $request->input('name');
+                $days = $request->input('days');
+                $hour = Date("Y-m-d")."T".$request->input('hour');
 
-            $listq->name = $request->name;
-            $listq->days = $request->days;
-            $listq->hour = $request->hour;
 
-            $listq->user_id = $request->user_id;
-            $listq->category_id = $request->category_id;
+                $list->name = $name;
+                $list->days = $days;
+                $list->hour = $hour;
+                $list->user_id = $request->user_id;
+                $list->category_id = $request->category_id;
+                
+                $list->save();
+                // $this->gerarQuestoes($listq, $request->questions);
+                $this->gerarAgendamentos($list);
+                
 
-            $listq->save();
-
-            //return $listq;
-            return response('Lista atualizada com sucesso', 200);
-
-        }catch(\Exception $erro) {
+                //return $listq;
+                return response('Lista atualizada com sucesso', 200);
+            });
+        }
+        catch(\Exception $erro) {
             return $erro->getMessage();
         }
     }

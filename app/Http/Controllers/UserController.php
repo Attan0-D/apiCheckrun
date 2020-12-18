@@ -70,32 +70,43 @@ class UserController extends Controller
         //
     }
 
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, User $user)
     {
         try{
 
-            $user = User::find($id);
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $confirmPassword = $request->input('confirmPassword');
 
-                $user->name = $request->name;
 
-                //variavel para a segunda condição abaixo
-                $oldemail = $user->email;
 
-                $user->email = $request->email;
-                $user->password = $request->password;
+            //verifica se o email digitado já esta em uso.
 
-                //verifica se o email digitado já esta em uso.
-                $userExists = User::where('email', $user->email)->first();
-
-                // para verificar a existencia do email no banco, e se o mesmo ja
-                // sendo utilizado pelo usuario em questão.
-                if($userExists && $userExists->email != $oldemail){
-                        return response('Email Não Permitido:
-                        Outro usuario já esta cadastrado com esse email.', 400);
+            // para verificar a existencia do email no banco, e se o mesmo ja
+            // sendo utilizado pelo usuario em questão.
+            if($email != $user->email){
+                $userExists = User::where('email', $email)->first();
+                if($userExists){
+                    return response('Email Não Permitido:
+                    Outro usuario já esta cadastrado com esse email.', 400);
                 }
 
-                $user->save();
-                return response('Usuario atualizado com sucesso', 200);
+            }
+
+            if($password){
+                if($password != $confirmPassword) return response("Senhas não coincidem.", 422);
+            }     
+           
+            $user->name = $name;
+            $user->email = $email;
+            if($user->password){
+                $user->password = Hash::make($user->password);
+            }
+
+
+            $user->save();
+            //return response('Usuario atualizado com sucesso', 200);
 
         }catch(\Exception $erro) {
             return $erro->getMessage();

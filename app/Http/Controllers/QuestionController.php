@@ -18,10 +18,10 @@ class QuestionController extends Controller
     }
 
 
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     public function store(QuestionRequest $request)
     {
@@ -50,14 +50,21 @@ class QuestionController extends Controller
     public function show(int $list_id)
     {
         //retornas as questões de uma lista em especifica
-        $question = question::where('listq_id',$list_id)->get();
-         return $question; 
+        $question = question::where('listq_id', $list_id)->get();
+        return $question; 
     }
 
-    public function edit(Question $question)
+    public function showUnique(int $question_id)
     {
-        //
+        //retornas as questões de uma lista em especifica
+        $question = question::where('id', $question_id)->get();
+        return $question; 
     }
+
+    // public function edit(Question $question)
+    // {
+    //     //
+    // }
 
     public function update(QuestionRequest $request, $id)
     {
@@ -66,11 +73,14 @@ class QuestionController extends Controller
                 $question = Question::find($id);
 
                 $question->description = $request->description;
+                $question->yes = $request->yes;
+                $question->no = $request->no;                
+
     
                 $question->save();
 
 
-            return response('Questão atualizada com sucesso', 200);;
+            return response('Questão atualizada com sucesso', 200);
 
         }catch(\Exception $erro) {
 

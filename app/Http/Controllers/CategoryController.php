@@ -65,7 +65,7 @@ class CategoryController extends Controller
     public function show(int $list_id)
     {
         //
-        $category = Category::where('list_id',$list_id)->get();
+        $category = Category::where('list_id', $list_id)->get();
         return $category; 
     }
 
