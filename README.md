@@ -1,3 +1,19 @@
+Este é o Back-End do aplicativo Check & Run, Desenvolvido como Trabalho de conclusão de curso 
+para o curso Técnico em Desenvolvimento de Sistemas (Serviço Nacional de Aprendizagem Industrial - SENAI).
+
+Check & Run é um aplicativo de gerenciamento de tarefas simples que utiliza da ideia de lembrar ao usuário 
+o que tem que ser feito no dia a dia, contando com uma usabilidade intuitiva e de fácil aprendizagem.
+Check & Run foi feito com PHP Laravel para back-end , MySql como banco de dados (Utilizando de Migrations) 
+e IONIC para front-end.
+
+Equipe de Desenvolvimento:
+
+Joubert Natividade
+Tainan Suzarte
+David Santos
+Marcelo Brito
+Ezequias Gonçalves.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
